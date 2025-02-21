@@ -34,3 +34,5 @@ gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 
 # Support for biblatex citations
 gem 'jekyll-scholar', group: :jekyll_plugins
+
+gem "dotenv", "~> 3.1"

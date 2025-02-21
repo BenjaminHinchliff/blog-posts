@@ -27,6 +27,7 @@ GEM
       csl (~> 1.0)
     csv (3.3.2)
     date (3.4.1)
+    dotenv (3.1.7)
     em-websocket (0.5.3)
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0)
@@ -197,6 +198,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
+  dotenv (~> 3.1)
   http_parser.rb (~> 0.6.0)
   jekyll (~> 4.4.1)
   jekyll-feed (~> 0.12)
