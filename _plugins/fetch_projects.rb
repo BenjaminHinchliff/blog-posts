@@ -1,6 +1,7 @@
 require 'uri'
 require 'net/http'
 require 'json'
+require 'dotenv/load'
 
 module ProjectsPage
   class GithubRepoGenerator < Jekyll::Generator
@@ -23,25 +24,41 @@ module ProjectsPage
       repos = []
       repo_page = nil
 
+      # check api token
+      if ENV["GITHUB_API_TOKEN"].nil? then
+          Jekyll.logger.error "GitHubRepoGenerator:", "Missing GITHUB_API_TOKEN"
+          return
+      end
+      api_token = ENV["GITHUB_API_TOKEN"]
+
       while repo_page.nil? || repo_page.length == PER_PAGE
-        # ... (rest of the API fetching code is the same as before)
-         url = URI("https://api.github.com/users/BenjaminHinchliff/repos?type=owner&sort=pushed&per_page=#{PER_PAGE}&page=#{page}")
-        response = Net::HTTP.get(url)
+        headers = {
+          Accept: "application/vnd.github+json",
+          Authorization: "Bearer #{api_token}",
+          "X-GitHub-Api-Version": "2022-11-28"
+        }
+        url = URI("https://api.github.com/users/BenjaminHinchliff/repos?type=owner&sort=pushed&per_page=#{PER_PAGE}&page=#{page}")
+        response = Net::HTTP.get(url, headers)
 
         begin
           repo_page = JSON.parse(response)
         rescue JSON::ParserError => e
           Jekyll.logger.error "GitHubRepoGenerator:", "Error parsing JSON response: #{e.message}"
-          return # Stop processing if JSON parsing fails
+          return
         end
 
         repos.push(*repo_page)
         page += 1
       end
+
+      return repos
     end
 
     def generate(site)
       repos = fetch_repos()
+      if repos.nil? then
+        return
+      end
 
       projects = site.pages.find { |page| page.name == 'projects.html'}
 
