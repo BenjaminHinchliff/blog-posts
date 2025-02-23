@@ -91,7 +91,9 @@ everything from tokenisation, part of speech analysis, and more, not to mention
 
 ### Symbolic\[Neuro\]
 
-Symbolic\[Neuro\]
+Symbolic\[Neuro\] systems are systems where neural techniques are integrated as
+subcomponent of an overarching neural technique. This is probably most easily
+understood by one of the most famouse examples, AlphaGo.
 
 * From Henry Kautz’s presentation during AAAI 2020  
   * No broad agreement on categorization  
