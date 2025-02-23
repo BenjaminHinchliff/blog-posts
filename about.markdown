@@ -4,15 +4,17 @@ title: About
 permalink: /about/
 ---
 
-This is the base Jekyll theme. You can find out more info about customizing your
-Jekyll theme, as well as basic Jekyll usage documentation at
-[jekyllrb.com](https://jekyllrb.com/)
+Welcome to the personal website of Benjamin Hinchliff. I'm a computer scientist
+and masters graduate student at Cal Poly SLO, with an interest in many topics
+including security, operating systems, and machine learning. I've a
+long-standing interesting in computers and have been programming from a young
+age, around middle school.
 
-You can find the source code for Minima at GitHub: [jekyll][jekyll-organization]
-/ [minima](https://github.com/jekyll/minima)
-
-You can find the source code for Jekyll at GitHub: [jekyll][jekyll-organization]
-/ [jekyll](https://github.com/jekyll/jekyll)
-
-
-[jekyll-organization]: https://github.com/jekyll
+I also like cats, specifically our cats Harry and Humbug, video games
+(especially Starcraft), and all kinds of media, especially books and webnovels.
+A couple favorites are Martha Wells' [*Murderbot
+Diaries*](https://en.wikipedia.org/wiki/The_Murderbot_Diaries), Arkady Martine's
+[*A Memory Called Empire*](https://en.wikipedia.org/wiki/A_Memory_Called_Empire)
+(thanks to my sister reccomending it), Guiltythree's [Shadow
+Slave](https://www.webnovel.com/book/shadow-slave_22196546206090805), and
+Temple's [REND](https://www.royalroad.com/fiction/32615/rend).
