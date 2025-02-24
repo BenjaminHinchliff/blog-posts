@@ -39,3 +39,9 @@ gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
 gem 'jekyll-scholar', group: :jekyll_plugins
 
 gem "dotenv", "~> 3.1"
+
+gem "rack", "~> 3.1"
+
+gem "puma", "~> 6.6"
+
+gem "rack-contrib", "~> 2.5"
