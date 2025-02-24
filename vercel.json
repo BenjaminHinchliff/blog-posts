@@ -1,0 +1,6 @@
+{
+  "crons": [{
+    "path": "/rebuild",
+    "schedule": "0 * * * *"
+  }]
+}
