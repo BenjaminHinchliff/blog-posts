@@ -93,42 +93,62 @@ everything from tokenisation, part of speech analysis, and more, not to mention
 
 Symbolic\[Neuro\] systems are systems where neural techniques are integrated as
 subcomponent of an overarching neural technique. This is probably most easily
-understood by one of the most famouse examples, AlphaGo.
+understood by one of the most famous examples, AlphaGo.
 
-* From Henry Kautz’s presentation during AAAI 2020  
-  * No broad agreement on categorization  
-  * *Very* messy with a lot of overlap  
-* symbolic Neuro symbolic  
-  * Both inputs and outputs are in symbolic form, but the entire processing
-  itself is done within a neural network  
-  * Many neural networks, including LLM systems, fall into this category  
-* Symbolic\[Neuro\]  
-  * Systems where neural techniques are integrated into larger symbolic
-  techniques  
-  * Commonly used in advanced game agents, e.g. AlphaGo (Monte-carlo tree search
-  with neural policy and value networks) \[cite\]  
-* Neuro ∪ compile(Symbolic)  
-  * Neural techniques where networks are attempted to be constrained by symbolic
-  rules and techniques  
-  * Applying deep learning to existing symbolic techniques like beam search,
-  e.g. Deep Learning for solving mathematical equations   
-* Neuro → Symbolic  
-  * Cascading techniques where the output of a neural technique is used as input
-  to a symbolic technique  
-  * Commonly used in applications to take in natural language and then perform
-  symbolic reasoning  
-* Neuro\[Symbolic\]  
-  * Applications where neural techniques are able to invoke symbolic techniques
-  for specific tasks within the network  
-  * LLMs invoking Wolfram Alpha for solving of equations within a query
+#### AlphaGo
 
-### Trends in Neuro-symbolic Application \[3, 4\]
+AlphaGo, for those who don't know already, is a landmark technique for playing
+the game of Go. Oversimplifying, Go is a game where two players alternately
+place stones on a board, and stones that are fully surrounded are able to be
+captured. From a Machine Learning perspective, Go is a difficult game it has a
+few properties that make it difficult to use search techniques. Namely, it has a
+high branching factor, that is there are many potential moves for most boards,
+the games are long, taking many more turns than a game like chess, and winning
+strategies can be difficult to evaluate, requiring a lot of planning into the
+future. This leads to computational problems with most search techniques,
+including advanced ones like Monte-carlo Tree Search (MCTS). AlphaGo solves this
+by augmenting the MCTS algorithm with deep learning networks in what's called
+the policy and value functions, functions that are used by the algorithm to
+evaluate which moves to search next and how good those moves are likely to be.
+This allowed the system to perform very well on this problem, and continues to
+be applied to many games nowadays {% cite Silver2016 %}.
 
+### Neuro\[Symbolic\]
+
+Neuro\[Symbolic\] is more-or-less the inverse of Symbolic\[Neuro\] techniques.
+Instead of integrating a neural component into a symbolic system, it's
+integrating a symbolic component into a system that is otherwise entirely
+neural. There are many applications for such systems, but an example would be
+plugins to LLM systems. Concretely, it might be an LLM, a neural system, when
+told to solve complex math equations, calling Wolfram Alpha, a symbolic system,
+to help it produce clear and correct mathematical results.
+
+### Neuro → Symbolic
+
+Neuro → Symbolic is a pretty straightforward "cascading" system. The result of a
+neural network is fed into a symbolic system as a whole to produce a final
+result. This is common in architectures that need to interpret complex input
+that requires connectionist systems, but look to turn that into a symbolic
+representation more useful for computers. This is common in natural language
+processing, as well as many other fields.
+
+### Neuro ∪ compile(Symbolic)
+
+Neuro ∪ compile(Symbolic) is the hardest to explain. The idea is to "compile"
+symbolic rules into a neural network, but not actually constrain the network
+itself. An example of this would be using a neural network to solve math
+equations, such as in Lample and Carton, where they use deep learning to solve
+complex math equations in a way that performs better than symbolic systems (of
+the time) on some instances {% cite Lample2020Deep %}.
+
+## Trends in Neuro-symbolic Application
+
+There are a variety of different fields where Neuro-symbolic systems are used to
 * Explainable AI  
 * Robustness in systems  
 * Expert systems
 
-### Specific Applications
+## Specific Applications
 
 #### Neural Formal Verification \[2\]
 
