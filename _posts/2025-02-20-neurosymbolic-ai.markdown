@@ -207,7 +207,7 @@ Now that we've covered the theoreticals, the what and why, I think the merits of
 neuro-symbolic systems are best understood by seeing them in their latest
 real-world use.
 
-### Neural Formal Verification
+### Neural Formal Verification {% cite xie_neuro-symbolic_2022 %}
 
 The first application we'll be discussing is a neuro-symbolic system applied to
 formal verification of neural systems, and building a language to formalize the
@@ -233,10 +233,10 @@ Another way to put it, we want our system to ensure that the input feature of
 race has not effect on the output for all examples. This is a fairly simple
 property that we can now write as a formal equation:
 
-\\[
+$$
     x_i \ne x_i' \wedge \bigwedge_{j \ne i} x_j = x_j' \implies
     f(\overrightarrow{x}) = f(\overrightarrow{x}')
-\\]
+$$
 
 In this context, $x$ and $x'$ are arrays of all the input features that may or
 may not correspond to the same input data, indexed by $i$ and $j$, respectively.
@@ -246,82 +246,202 @@ save for the feature of interest, that the inputs must be identical. In our
 example, the feature $i$ would be race, and so for any two inputs identical save
 for the race of the person being evaluated the result should be identical.
 
-Note that this is, intentionally, somewhat of a toy example.
+Note that this is, intentionally, somewhat of a toy example. for the sake of
+simplicity, we are intentionally ignoring the complexities of such a system in
+the real world, such as confounding variables and multicollinearity.
 
-* Examine the change in the outputs for a known input, and ensure that the
-outputs match what is expected  
-* For instance, take the example of trying to ensure the property of “fairness”
-in a neural network  
-* Can be expressed as, two given inputs that are identical save for the
-“sensitive” input, the output should be identical, e.g. race has no effect on
-the size of a loan provided for example  
-* Expressed formally: ![][image1]  
-* As this is an example, we are ignoring multicollinearity and confounding and
-the like  
-* However, these simple techniques are limited because they can’t encode complex
-relationships
+So, now we have something really quite cool! However, we quickly run into issues
+if we care about properties that are harder to represent in formal notation. To
+demonstrate this, let's introduce a new example.
 
-##### Example from the Paper
+#### More Complex Examples
 
-* For a self-driving car network (f(x))  
-* Assert that whenever a stop sign is in view, the car must be decelerating  
-* The authors propose that one would train a separate network to recognize stop
-signs (g(x)), and then this assertion can be expressed as: ![][image2]
+Let's say we're a cool new company developing a system for a self-driving car,
+and we think it would be good if we ensured that our car stopped at stop signs.
+This is something I've been told it is good for cars to do.
 
-##### Their Framework
+One thing we might want to ensure in the process might be the statement
+"whenever a stop sign is in view, the car should be slowing down". Okay, now how
+might we write that in formal notation? Instantly we run into a problem because
+a ton of things in that statement are difficult to concretely define. What is a
+stop sign? How can I find a stop sign in view?
 
-* They propose a dedicated language to encode these kinds of relationships
-called Neuro-Symbolic Assertion Language (NeSEAL)  
-  * Fragment of FOL w/o quantifiers  
-* For instance, the earlier property can be encoded as:  
-* ![][image3]
+These kinds of questions are exactly the kinds of ones a neural system is
+well-suited to solve. So the idea the author build on is, what if we applied a
+neural network to solve these definitional problems, and then using that network
+made assertions about the behavior of our larger car network?
 
-##### Conclusions
+To that end, let's presuppose we have a neural system $g$ that finds when stop
+signs are in view. Now, it's trivial to encode our property. For a given set of
+inputs $\overrightarrow{x}$:
 
-* Still relies on the correctness of neural networks at the low level  
-* Does move towards greater robustness on more complex properties
+$$
+    g(\overrightarrow{x}) = \text{"yes"} \implies f(\overrightarrow{x}) =
+    \text{"deccelerate"}
+$$
 
-#### (Towards) Neuro-symbolic Video Understanding \[4\]
+#### Their Framework
 
-##### The Problem
+Now that we've laid the groundwork, we can talk about the language the authors'
+define, called Neuro-symbolic Assertion Language, or NeSEAL. It's basically the
+same kinds of things we've been writing already, just a little more formal,
+limited, and explicit.
 
-* Analyze and understand video to answer queries  
-* E.g. “Find the timestamp for the ‘I’m Flying’ scene from Titanic”  
-* ![][image4]  
-* Current network architectures do well with simple queries like that  
-* Struggle on queries that require time robustness  
-* E.g. “Find the scene that leads into the “I’m Flying” scene from the titanic”  
-* The authors attribute this to using a single network to try to comprehend both
-single frame features and inter-frame relationships (spatial and temporal data)
+Formally, the language is a fragment of first-order logic, but removing
+quantifiers. That is, it's basically the same logical statements we've been
+making already but the syntax is a little different to be a bit more explicit.
+Let's take our example. In NeSEAL, it would be written as:
 
-##### Background
+$$\begin{gather*}
+    \{\overrightarrow{x_1} = \overrightarrow{x_2}\} \\
+    y_1 \leftarrow f(\overrightarrow{x_1}) \wedge y_2 \leftarrow g(\overrightarrow{x_2}) \\
+    \{y_2 = \text{yes} \rightarrow y_1 = \text{decelerate}\}
+\end{gather*}$$
 
-###### *Temporal Logic*
+You can see that the bones of our same statement are still here. First, we
+create two input variables $x_1$ and $x_2$, which we then assert are equal.
+Then, we feed these inputs into two functions: $f$ and $g$. In this context, $f$
+is our self-driving car function, and $g$ is the stop sign detecting network. We
+assign the results to two variables $y_1$ and $y_2$ and ensure that they both
+succeed with the $\wedge$ clause. Lastly, we assert the property itself, if the
+$g$ network is currently detecting a stop sign it must imply that the
+self-driving car is decelerating.
 
-* A superset of first-order logic that adds additional quantifiers  
-* For example, Always (◻), Eventually/Exist (♦), Next (X), Until (U)
+#### Limitations
 
-###### *Probabilistic Automata Model Checking*
+So, this is a cool application of neuro-symbolic systems and it's quite well
+though-out. However, it does have some practical limitations, with two being
+immediately obvious to me.
 
-* For simple models like Probablistic Automatons (basically NFAs)  
-* Can be formally verified to adhere to a set of temporal logic by exploring the
-state space and ensuring the model entails the specification
+First, it obviously still relies on *a* neural network being correct, even if it
+isn't the same neural network. In this context, if $g$ doesn't detect a stop
+sign, the verification can have a false positive and the car might not stop at a
+stop sign when it really should. However, it should be noted that this is
+obviously better than the alternative, that being no checks on the system.
+Ideally, I could see this working quite well if $f$ and $g$ were reasonably
+independent, such as having different training data and architectures, in the
+hope that they'd have different failure modes.
+
+Second, it still requires hard-coded properties. This may seem trivial, but for
+a complex system determining all the validation rules can be very complicated.
+If you'd like to experience that I recommended trying to formally verify PLC
+programs it's very... *fun*.
+
+### Towards Neuro-symbolic Video Understanding {% cite choi_towards_2025 %}
+
+Moving on from verification now to computer understanding, let's talk about one
+more neuro-symbolic system. Our next system focuses on creating a neuro-symbolic
+system to better understand videos.
+
+#### The Problem
+
+To first introduce the problem: let's say that you're a user and you want to
+query an AI system for various information about a video. For a simple example,
+let's say you want to find the timestamp in the movie *Titanic* where the famous
+"I'm Flying" scene happens.
+
+Simple examples like this can already be done quite well by existing systems
+that look a video frames and break down their content, which then can be
+searched. However, this simple approach starts to break down when we start to
+introduce problems that require a higher degree of temporal understanding. For
+instance, let's say we wanted to find the scenes between two major events such
+as the scenes between the I'm flying scene and the nude drawing scene again the
+*Titanic*. This requires a higher degreee of temporal understanding, which many
+approaches can struggle with.
+
+The authors attribute these difficulties to trying to use a single model for
+both single-frame features and inter-frame relationships, or more generally
+spatial and temporal data. To solve this, the authors create a system grounded
+in temporal logic that are used to query probabilistic automata representing
+relationships between key frames in the video. 
+
+#### Background
+
+That was a lot of terms to drop, so let's lay some groundwork before we get into
+the weeds.
+
+##### *Temporal Logic*
+
+First, just what is temporal logic? Temporal logic is a superset of first-order
+logic that adds additional quantifiers to assert temporal relationships for
+variables. Now, for the uninitiated, first-order logic is itself a superset of
+propositional logic, which is just simple statements about variables, this and
+that must be true, this and that, that kind of thing. First-order logic extends
+that by adding quantifiers, like this must be true for all instances of this
+thing, and functions. Temporal logic further extends that by adding even more
+quantifiers!
+
+To give a few examples:
+- Always (◻) - the predicate must always exist temporally
+- Eventually/Exist (♦) - the predicate must eventually be true temporally
+- Next (X) - two terms must come sequentially, this then that
+- Until (U) - similar to next but just to assert that this doesn't exist until
+  something else exists
+  
+For a more complete introduction, feel free to peruse the temporal logic
+[wikipedia page](https://en.wikipedia.org/wiki/Temporal_logic).
+
+##### *Probabilistic Automata Model Checking*
+
+Next, I should quickly introduce probabilistic automata. Probabilistic automata
+are similar to other types of automata you might be familiar with from
+introductory theoretical computing, such as finite state automata, with the
+twist being the transition from one state to the next for a given input isn't
+deterministic, there's instead a probability of each potential branch. They're
+used in this context due to the uncertain nature of understanding the
+progression of scenes and events.
+
+For our discussion here, though, one main property is relavent: one can ensure
+that a probabilistic automata is entailed by a temporal logic statement. This is
+critical to how queries are built in the system.
 
 ##### Their Solution
 
-* ![][image4]  
-* Process frames using standard vision systems to find their content  
-* Validate which frames contain relevant information  
-* Construct a probabilistic automaton for the relations between information in
-frames  
-* Construct a temporal logic representation of the query, and find a
-probabilistic automaton that conforms to that query  
-* Performs better on many metrics than existing models (\~9-15% improvement)  
-* ![][image5]
+With that out of the way, let's look at a figure from the paper showing an
+example run by their system.
+
+![Example run](/assets/model-arch.png)
+
+As you can see in the diagram, everything begins with finding the content of a
+single frame. With their system, this can be done with any off-the-shelf
+neuro-perception model, in their example they show YOLOv8 and CLIP, which are
+able to extract wha they call "atomic propositions" from the scene. Things like
+"man hugging woman" or "ship on the sea", for a given scene.
+
+These atomic propositions are then fed into the frame validation system, which
+attempts to extract frames that might be relevant to the prompt, to reduce the
+search space. It also attempts to assemble the scenes into a probabilistic
+automata. 
+
+Lastly, there's the stage where this automata is searched for the user's query.
+Another network is used to construct a temporal logic specification from the
+user's query, and then query can be used to search the automata for where it
+might be entailed.
+
+Using all this, they were able to build a system more able to query videos with
+higher accuracy, seeing between a 9 to 15 percent improvement as compared to the
+SOTA models of the time.
+
+![Performance](/assets/model-perform.png)
+
+As can be seen in the table, they benchmark their model using a variety of
+different recognition front-ends and on multiple different datasets and
+benchmark. They found that a masked R-CNN performs best on most benchmarks with
+their system. They then compare with state-of-the-art models of the time, namely
+the GPT models up to GPT-4, since the paper was being written before GPT-4o was
+released. As can be seen from the box-and-whisker plots, their model performs
+best on all datasets, by either a narrow or often quite significant margin.
+
+## Wrapping Up
+
+These examples show the promise of neuro-symbolic systems, but also some of
+their pitfalls. They can improve things, but often end up being more complex and
+hard-to-maintain as a result. Still, they are often a good option and should be
+considered for an application.
 
 ## References
 
 {% bibliography --cited %}
 
-<!--  LocalWords:  neuro
+<!--  LocalWords:  neuro multicollinearity automata superset
  -->
