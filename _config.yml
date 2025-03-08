@@ -29,6 +29,8 @@ url: "https://benjaminhinchliff.com" # the base hostname & protocol for your sit
 github_username:  BenjaminHinchliff
 scholar:
   style: apa
+kramdown:
+  math_engine: mathjax
 
 # Build settings
 theme: minima

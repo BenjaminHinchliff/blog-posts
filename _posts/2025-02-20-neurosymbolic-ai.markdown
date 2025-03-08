@@ -144,15 +144,109 @@ the time) on some instances {% cite Lample2020Deep %}.
 ## Trends in Neuro-symbolic Application
 
 There are a variety of different fields where Neuro-symbolic systems are used to
-* Explainable AI  
-* Robustness in systems  
-* Expert systems
+great effect. Of particular note are the following.
+
+### Explainable AI Systems
+
+Earlier, we discussed one of the disadvantages of Symbolic AI system being the
+fact that they require a human to be able to understand or model the problem in
+order to be created. While normally a downside, the flip-side of this is that,
+typically, symbolic AI systems are much easier for people to understand the
+final result of such a system. After all, we work with symbolic systems all the
+time, such as in math, just fine.
+
+However, it should be noted that this isn't a universal truth. Symbolic systems
+are *typically* more explainable but often face issues being difficult to
+explain at scale. For example, you as a human may be able to intellectually
+understand what the earlier mentioned mini-max tic-tac-toe algorithm is doing at
+any given step, but it's difficult to know *exactly* what is actually happening
+with it because of how many branches a game can take. This problem only gets
+worse in more complex environments, such as in chess, and with more complex
+techniques, like adding Alpha-Beta pruning or approximations like in Monte-Carlo
+techniques.
+
+This can be improved by developing ways to visualize symbolic systems, or
+strip down complex systems into more understandable chunks. A good example of
+this would be in KG-LLM systems, systems were a symbolic representation of
+facts, called a Knowledge Graph, is added to a large language model to so that
+it is able to answer factual questions by drawing on facts from the knowledge
+base. Obviously, for any non-trivial example, the number of facts a user might
+ask about is too massive for a human to easily interpret. However, we can
+visualize just the facts the model queries for a given prompt, and in the
+process get an idea of where the LLM is getting its information from (and if its
+getting it from the correct places).
+
+### Robustness In Systems
+
+Another area where neuro-symbolic systems do well is systems where a neural
+solution is required but alone can learn the wrong patterns or be overly
+fragile. We saw this earlier with KG-LLMs: LLMs are already great on their own
+at answering queries but they lack an understanding of truth. In their training
+dataset, there are certainly cases of misinformation, both outright and
+unintentional. The LLM has no intrinsic way to distinguish truth and lies, and
+so if we want more robust query answers, such as is required in many domains, it
+needs to be augmented with a real base of knowledge it can reference.
+
+This links back to the earlier point about explain ability in neuro-symbolic
+systems. A system that can be explained is going to inherently be more robust
+for the simple fact that a human can understand more about the process that went
+into it and is more able to detect mistakes, and it makes it easier to build
+automated systems to do the same.
+
+### Expert Systems
+
+Lastly neuro-symbolic systems are practically required for most expert systems,
+systems that aims to emulate the decision making of a human expert. This could
+be, for example, a medical system that aims to give basic first-aid advice in an
+emergency. Once again, for such systems a level of robustness and explainability
+in the event of failure (for lawsuits) is required.
 
 ## Specific Applications
 
-#### Neural Formal Verification \[2\]
+Now that we've covered the theoreticals, the what and why, I think the merits of
+neuro-symbolic systems are best understood by seeing them in their latest
+real-world use.
 
-##### Principles and Techniques
+### Neural Formal Verification
+
+The first application we'll be discussing is a neuro-symbolic system applied to
+formal verification of neural systems, and building a language to formalize the
+process.
+
+The broad idea of verification in this context is to ensure that a system will
+perform as expected, and that for all inputs it gives the expected output. As
+you're probably aware, this can be particularly tricky with neural systems
+because they may learn patterns in the training data that aren't real patters or
+reproduce undesirable biases also present in the training set.
+
+#### Principles and Techniques
+
+First, we should lay some groundwork. After all, formal verification has been
+around a while and comes in many different forms.
+
+Let's take a simple example of a system we might want to verify a property of.
+Let's say we were constructing a system for determining loan amounts to
+customers at a bank, and we want to ensure that our fancy new system doesn't
+have any overt racial bias.
+
+Another way to put it, we want our system to ensure that the input feature of
+race has not effect on the output for all examples. This is a fairly simple
+property that we can now write as a formal equation:
+
+\\[
+    x_i \ne x_i' \wedge \bigwedge_{j \ne i} x_j = x_j' \implies
+    f(\overrightarrow{x}) = f(\overrightarrow{x}')
+\\]
+
+In this context, $x$ and $x'$ are arrays of all the input features that may or
+may not correspond to the same input data, indexed by $i$ and $j$, respectively.
+These serve as input to a neural system, the function $f$. As can be seen, this
+ensures that for two of the same feature in two different records, identical
+save for the feature of interest, that the inputs must be identical. In our
+example, the feature $i$ would be race, and so for any two inputs identical save
+for the race of the person being evaluated the result should be identical.
+
+Note that this is, intentionally, somewhat of a toy example.
 
 * Examine the change in the outputs for a known input, and ensure that the
 outputs match what is expected  
@@ -228,3 +322,6 @@ probabilistic automaton that conforms to that query
 ## References
 
 {% bibliography --cited %}
+
+<!--  LocalWords:  neuro
+ -->
