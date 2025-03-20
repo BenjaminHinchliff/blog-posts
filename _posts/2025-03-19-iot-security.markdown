@@ -213,6 +213,41 @@ that risk**. So you need to replace that device with a newer one, one that's
 protected, get rid of it and it's associated risk, or never connect it to the
 internet again so an attacker can never connect to it. 
 
+## Harm to Society
+
+It should be noted that while I've chosen to focus largely on individual harms,
+but vulnerable smart devices have a variety of large-scale implications on a
+larger scale.
+
+### Botnets and DDoS Attacks
+
+As alluded to earlier, one of the big uses from the perspective of an attacker
+for IoT devices is to build what are called botnets. These are massive networks
+of hacked devices that can be controlled by an attacker. Most of the time, these
+are used in distributed denial of service, or DDoS, attacks. These are attacks
+that attempt to disable pieces of infrastructure, such as a website, by
+overwhelming it with so many connections it cannot hope to keep up. This was/is
+the application for the Mirai botnet mentioned earlier. While on an individual
+level, the change in traffic is fairly minimal, the harm to our shared
+infrastructure as a whole by these kinds of systems is massive.
+
+### Disproportionate Risk
+
+One thing that you've likely picked up on by now is that cheap smart home stuff
+isn't just bad, it's dangerous. However, not everyone can afford the
+top-of-the-line gear. For example, it's not feasible for someone who lives
+paycheck to paycheck to buy an expensive pet camera just to keep an eye on their
+cat while they're at work.
+
+This points to a need for better security regulation for these devices. Think of
+it like regulating pharmaceuticals. In the developed world, you can go buy
+generic drugs and know you (probably) won't die because of great regulation by
+the FDA.  While the scale of harm for failure is more extreme in that case, I
+think it's clear that a great deal of less concrete harm is being done by the
+current state of security regulation for smart devices. While the right level of
+regulation is arguable, I would contend that right now we're solidly in the
+realm of not enough (though that's a whole different discussion).
+
 ## Final Thoughts
 
 The world is a safe place, and sadly, neither is the internet. Smart home
