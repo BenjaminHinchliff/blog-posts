@@ -18,7 +18,12 @@ permalink: /projects/
 <ul>
   {% for project in page.projects %}
   <li>
-    <a href="{{ project.html_url }}"> {{ project.name }} </a>
+    <a href="{{ project.html_url }}">
+      {% if project.fork %}
+        (fork)
+      {% endif %}
+      {{ project.name }}
+    </a>
     <p>
       {% if project.description %}
       {{ project.description }}
