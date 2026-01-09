@@ -26,29 +26,26 @@ description: >- # this means to ignore newlines until "baseurl:"
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "https://benjaminhinchliff.com" # the base hostname & protocol for your site, e.g. http://example.com
 # twitter_username: jekyllrb
-github_username:  BenjaminHinchliff
+github_username: BenjaminHinchliff
 scholar:
   style: apa
 kramdown:
   math_engine: mathjax
 
 defaults:
-  -
-    scope:
+  - scope:
       path: ""
       type: posts
     values:
       is_post: true
 
 # Build settings
-theme: minima
 plugins:
   - jekyll-feed
   - jekyll-scholar
 
 exclude:
   - .cache/
-
 # Exclude from processing.
 # The following items will not be processed, by default.
 # Any item listed under the `exclude:` key here will be automatically added to
