@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "How Lights Can Leak Your Wi-Fi Password: The Cybersecurity Nightmare of Smart Homes"
-date: 2025-02-20 15:30:20 -0800
+date: 2025-03-19 14:35:20 -0800
 categories: security IoT
 ---
 
